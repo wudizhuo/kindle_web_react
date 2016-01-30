@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kindle助手</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="//cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/parsley.js/2.1.2/parsley.js"></script>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/affix.js"></script>
+    <script type="text/javascript" src="assets/js/kindle.js"></script>
+
+    <link rel="shortcut icon" href="assets/image/logo.jpg">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row" style="margin-top:10px;">
+        <div class="pull-left">
+            <div class="col-md-3">
+                <img src="assets/image/logo.jpg" width="48px" height="48px"/>
+            </div>
+            <div class="col-md-8">
+                <h3>Kindle助手</h3>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav navbar-nav pull-right">
+                <li><a href="http://sj.qq.com/myapp/detail.htm?apkName=com.kindleassistant">App下载</a></li>
+                <li><a href="http://sspai.com/28388">帮助</a></li>
+                <li><a href="http://weibo.com/wudizhuo">微博 联系作者</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+
+        <div>
+            <br>
+            <input id="url" type="url" class="form-control" name="url" placeholder="请输入要推送的网址" required>
+            <br>
+
+            <div id="preview_loading" hidden>
+                <p><img src="assets/image/loading.gif"/>加载中</p>
+            </div>
+            <div id="preview_error"></div>
+            <button id="preview" class="btn btn-lg btn-primary">预览</button>
+            <br>
+
+
+            <iframe hidden id="preview_result" class="col-lg-12 col-md-12 col-sm-12" height="390px">
+            </iframe>
+            <br>
+
+            <form id="send_form" method="post">
+                <input id="from_email" type="email" class="form-control" name="from_email" placeholder="请输入信任的邮箱"
+                       required>
+                <br>
+                <input id="to_email" class="form-control" name="to_email" placeholder="请输入kindle接收邮箱" required>
+                <br>
+
+                <select id="domain" name="domain" class="add-on"
+                        style="width: 150px; height: 28px; color: #666; text-align: left; line-height: 22px;">
+                    <option title="Kindle users in China" value="1">@kindle.cn</option>
+                    <option title="Wi-Fi delivery • Free!" value="4">@free.kindle.com</option>
+                    <option title="3G or Wi-Fi delivery • Amazon might charge!" value="2">@kindle.com</option>
+                    <option title="Duokan Kindle" value="3">@iduokan.com</option>
+                    <option title="PocketBook" value="5">@pbsync.com</option>
+                </select>
+                <br>
+                <br>
+
+                <div id="send_loading" hidden>
+                    <p><img src="assets/image/loading.gif"/>发送中</p>
+                </div>
+                <div id="send_result"></div>
+                <a id="send" class="btn btn-lg btn-primary"
+                        >推送</a>
+                <br>
+                <br>
+                <input id="file" type="file"
+                       accept=".azw,.mobi,application/zip,application/pdf,text/html,image/*,application/rtf,text/rtf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                       class="form-control" name="file" placeholder="请输入要推送的文件" required>
+                <br>
+                <!--<input type="submit" class="btn btn-lg btn-primary" value="推送文件"/>-->
+            </form>
+            <div id="send_file_loading" hidden>
+                <p><img src="assets/image/loading.gif"/>上传中</p>
+            </div>
+            <div id="send_file_result"></div>
+            <button id="send_file" class="btn btn-lg btn-primary">推送文件</button>
+        </div>
+    </div>
+</div>
+<div class="footer" hidden>
+    <p><a href="http://www.miibeian.gov.cn" target="_blank">京ICP备15040267号</a></p>
+</div>
+</body>
+
+</html>
