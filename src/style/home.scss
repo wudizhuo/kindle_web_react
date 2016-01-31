@@ -1,0 +1,67 @@
+@import "palette";
+
+html {
+  font-family: sans-serif;
+  background-color: #fafafa;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  color: #727272;
+}
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+h1,h2 {
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.app-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.home {
+  flex-grow: 1;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .slogan {
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 50px;
+    font-weight: 500;
+    width: 100%;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    background-color: rgba(0,0,0,0.5);
+  }
+}
+
+.app-footer {
+  background-color: #00bcd4;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  font-size: 25px;
+  color: #fff;
+  flex-shrink: 0;
+}

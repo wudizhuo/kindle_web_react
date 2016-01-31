@@ -2,10 +2,8 @@
 <html lang="zh-hans">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Kindle助手</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
     <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
 
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -16,7 +14,6 @@
     <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/affix.js"></script>
     <script type="text/javascript" src="assets/js/kindle.js"></script>
 
-    <link rel="shortcut icon" href="assets/image/logo.jpg">
 </head>
 <body>
 
@@ -25,7 +22,7 @@
     <div class="row" style="margin-top:10px;">
         <div class="pull-left">
             <div class="col-md-3">
-                <img src="assets/image/logo.jpg" width="48px" height="48px"/>
+                <img src="src/assets/logo.jpg" width="48px" height="48px"/>
             </div>
             <div class="col-md-8">
                 <h3>Kindle助手</h3>
@@ -48,7 +45,7 @@
             <br>
 
             <div id="preview_loading" hidden>
-                <p><img src="assets/image/loading.gif"/>加载中</p>
+                <p><img src="src/assets/loading.gif"/>加载中</p>
             </div>
             <div id="preview_error"></div>
             <button id="preview" class="btn btn-lg btn-primary">预览</button>
@@ -78,7 +75,7 @@
                 <br>
 
                 <div id="send_loading" hidden>
-                    <p><img src="assets/image/loading.gif"/>发送中</p>
+                    <p><img src="src/assets/loading.gif"/>发送中</p>
                 </div>
                 <div id="send_result"></div>
                 <a id="send" class="btn btn-lg btn-primary"
@@ -92,7 +89,7 @@
                 <!--<input type="submit" class="btn btn-lg btn-primary" value="推送文件"/>-->
             </form>
             <div id="send_file_loading" hidden>
-                <p><img src="assets/image/loading.gif"/>上传中</p>
+                <p><img src="src/assets/loading.gif"/>上传中</p>
             </div>
             <div id="send_file_result"></div>
             <button id="send_file" class="btn btn-lg btn-primary">推送文件</button>

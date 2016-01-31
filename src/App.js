@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
-import { NICE, SUPER_NICE } from './colors';
+import Header from './Header';
+import Main from './Main';
+import AppNav from './AppNav';
 
 class App extends Component {
+
   render() {
     return (
-        <span>aaa</span>
+      <div className="app-wrap">
+        <AppNav ref="leftNav" />
+        <Header onTouchTap={this._onLeftIconButtonTouchTap.bind(this)}/>
+        <Main />
+      </div>
     );
+  }
+
+  _onLeftIconButtonTouchTap() {
+    this.refs.leftNav.handleToggle();
   }
 }
 
