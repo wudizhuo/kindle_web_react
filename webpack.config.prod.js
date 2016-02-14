@@ -29,6 +29,14 @@ module.exports = {
       test: /\.js$/,
       loaders: ['babel'],
       include: path.join(__dirname, 'src')
-    }]
+    },
+      {
+        test: /\.scss$/,
+        loader: 'style!css!postcss!sass'
+      },
+      {
+        test: /\.(png|jpg)$/,
+        loader: 'url?limit=25000'
+      }]
   }
 };
