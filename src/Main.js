@@ -11,7 +11,7 @@ class Main extends Component {
       <div style={styles.container}>
         <TextField style={styles.input}
                    underlineFocusStyle={styles.underlineStyle}
-                   floatingLabelText="请输入要推送的网址"
+                   floatingLabelText="请输入要推送的网址(开发中,网站还不能使用...)"
         />
 
         <div style={styles.buttonGroup}>
