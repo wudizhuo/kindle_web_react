@@ -4,23 +4,31 @@ import { primaryColor,primaryColorText,primaryColorLight,accentColor,primaryColo
 import {baseUrl} from './Const';
 import RaisedButton from 'material-ui/lib/raised-button';
 import axios from 'axios';
+import cookie from 'react-cookie';
+
+//todo response handle
+
+let from_email = "";
+let to_email = "";
 
 class Main extends Component {
+
 
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {},
+      isShowSaveBtn: false,
     };
+
+    from_email = cookie.load('from_email');
+    to_email = cookie.load('to_email');
   }
 
   send() {
     const sendApi = baseUrl + 'send';
 
     const sendUrl = this.refs.sendUrl.getValue();
-    const from_email = this.refs.fromEmail.getValue();
-    const to_email = this.refs.toEmail.getValue();
 
     console.log(sendUrl);
 
@@ -73,17 +81,49 @@ class Main extends Component {
 
         <TextField style={styles.input}
                    ref="fromEmail"
+                   value={from_email}
+                   onChange={this._emailChange.bind(this)}
                    underlineFocusStyle={styles.underlineStyle}
                    floatingLabelText="请输入信任的邮箱"
         />
         <TextField style={styles.input}
                    ref="toEmail"
+                   value={to_email}
+                   onChange={this._emailChange.bind(this)}
                    underlineFocusStyle={styles.underlineStyle}
                    floatingLabelText="请输入Kindle接收邮箱"
         />
+        {this._saveButton()}
       </div>
     );
   }
+
+  _emailChange() {
+    this.state.isShowSaveBtn = true;
+    from_email = this.refs.fromEmail.getValue();
+    to_email = this.refs.toEmail.getValue();
+    this.forceUpdate();
+  }
+
+  _saveButton() {
+    if (this.state.isShowSaveBtn) {
+      return (
+        <RaisedButton
+          label="保存" backgroundColor={accentColor} labelColor={primaryColorText}
+          onClick={this._saveEmail.bind(this)}
+          style={styles.saveButton}
+        />
+      );
+    }
+  }
+
+  _saveEmail() {
+    this.state.isShowSaveBtn = false;
+    cookie.save('from_email', this.refs.fromEmail.getValue());
+    cookie.save('to_email', this.refs.toEmail.getValue());
+    this.forceUpdate();
+  }
+
 }
 
 var styles = {
@@ -92,12 +132,13 @@ var styles = {
     justifyContent: 'center',
     flexDirection: 'column',
     paddingTop: '2%',
-
+    alignItems: 'center',
   },
+
   input: {
     width: '39%',
-    alignSelf: 'center',
   },
+
   underlineStyle: {
     borderColor: primaryColor,
   },
@@ -105,9 +146,8 @@ var styles = {
   buttonGroup: {
     display: 'flex',
     width: '39%',
-    alignSelf: 'center',
     marginTop: '3vh',
-    marginBottom: '10vh',
+    marginBottom: '15vh',
   },
 
   button: {
@@ -116,10 +156,17 @@ var styles = {
     width: '35%',
     height: '5vh',
   },
+
+  saveButton: {
+    marginTop: '3vh',
+    width: '15%',
+  },
+
   labelStyle: {
     fontSize: '18px',
     fontWeight: 'bold'
   },
+
   exampleImageInput: {
     cursor: 'pointer',
     position: 'absolute',
