@@ -3,9 +3,11 @@ import TextField from 'material-ui/lib/text-field';
 import { primaryColor,primaryColorText,primaryColorLight,accentColor,primaryColorDark } from './colors';
 import {baseUrl,ERROR_CODE_FROM_EMAIL,ERROR_CODE_TO_EMAIL,ERROR_CODE_INVALID_URL} from './Const';
 import RaisedButton from 'material-ui/lib/raised-button';
+import CircularProgress from 'material-ui/lib/circular-progress';
 import axios from 'axios';
 import cookie from 'react-cookie';
 import isEmpty from 'lodash/lang/isEmpty';
+import Snackbar from 'material-ui/lib/snackbar';
 
 //todo response handle
 
@@ -14,6 +16,7 @@ let to_email = "";
 let error_from_email = "";
 let error_to_email = "";
 let send_url_error_text = "";
+let snackbar_msg = "";
 
 class Main extends Component {
 
@@ -23,6 +26,8 @@ class Main extends Component {
 
     this.state = {
       isShowSaveBtn: false,
+      showProgressBar: false,
+      showSnackbar: false,
     };
 
     from_email = cookie.load('from_email');
@@ -40,12 +45,18 @@ class Main extends Component {
       return;
     }
 
+    if (this.state.showProgressBar) {
+      snackbar_msg = "发送中...."
+      this.forceUpdate();
+      return;
+    }
+
     error_from_email = ""
     error_to_email = ""
     send_url_error_text = ""
-    this.forceUpdate();
 
-    console.log(sendUrl);
+    this.state.showProgressBar = true;
+    this.forceUpdate();
 
     axios.post(sendApi, {
         url: sendUrl,
@@ -53,17 +64,28 @@ class Main extends Component {
         to_email: to_email,
       })
       .then((res) => {
-        console.log(res);
+        this.state.showSnackbar = true;
+        this.state.showProgressBar = false;
+
+        snackbar_msg = "已发送"
+        this.forceUpdate();
       })
       .catch((res) => {
-        if (res.data.code == ERROR_CODE_FROM_EMAIL) {
-          error_from_email = res.data.error;
-        }
-        if (res.data.code == ERROR_CODE_TO_EMAIL) {
-          error_to_email = res.data.error;
-        }
-        if (res.data.code == ERROR_CODE_INVALID_URL) {
-          send_url_error_text = res.data.error;
+        this.state.showProgressBar = false;
+        switch (res.data.code) {
+          case ERROR_CODE_FROM_EMAIL:
+            error_from_email = res.data.error;
+            break;
+          case ERROR_CODE_TO_EMAIL:
+            error_to_email = res.data.error;
+            break;
+          case ERROR_CODE_INVALID_URL:
+            send_url_error_text = res.data.error;
+            break;
+          default:
+            snackbar_msg = res.data.error
+            this.state.showSnackbar = true;
+            break;
         }
         this.forceUpdate();
       });
@@ -91,7 +113,6 @@ class Main extends Component {
                    errorText={send_url_error_text}
                    floatingLabelText="请输入要推送的网址"
         />
-
         <div style={styles.buttonGroup}>
           <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
                         onClick={this.send.bind(this)}
@@ -107,7 +128,9 @@ class Main extends Component {
           </RaisedButton>
         </div>
 
-        <TextField style={styles.input}
+        {this._progressBar()}
+
+        <TextField style={styles.fromEmail}
                    ref="fromEmail"
                    value={from_email}
                    onChange={this._emailChange.bind(this)}
@@ -124,8 +147,23 @@ class Main extends Component {
                    floatingLabelText="请输入Kindle接收邮箱"
         />
         {this._saveButton()}
+        <Snackbar
+          open={this.state.showSnackbar}
+          message={snackbar_msg}
+          autoHideDuration={3000}
+        />
       </div>
     );
+  }
+
+  _progressBar() {
+    if (this.state.showProgressBar) {
+      return (
+        <CircularProgress
+          color={primaryColor}
+          style={styles.progress}/>
+      );
+    }
   }
 
   _emailChange() {
@@ -169,6 +207,11 @@ var styles = {
     width: '39%',
   },
 
+  fromEmail: {
+    width: '39%',
+    marginTop: '15vh',
+  },
+
   underlineStyle: {
     borderColor: primaryColor,
   },
@@ -177,7 +220,6 @@ var styles = {
     display: 'flex',
     width: '39%',
     marginTop: '2vh',
-    marginBottom: '15vh',
   },
 
   button: {
@@ -185,6 +227,10 @@ var styles = {
     marginRight: '2%',
     width: '35%',
     height: '5vh',
+  },
+
+  progress: {
+    marginTop: '5vh',
   },
 
   saveButton: {
