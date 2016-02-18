@@ -1,24 +1,68 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/lib/text-field';
 import { primaryColor,primaryColorText,primaryColorLight,accentColor,primaryColorDark } from './colors';
+import {baseUrl} from './Const';
 import RaisedButton from 'material-ui/lib/raised-button';
-
-//todo 邮箱自动补全
+import axios from 'axios';
 
 class Main extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: {},
+    };
+  }
+
+  send() {
+    const sendApi = baseUrl + 'send';
+
+    const sendUrl = this.refs.sendUrl.getValue();
+    const from_email = this.refs.fromEmail.getValue();
+    const to_email = this.refs.toEmail.getValue();
+
+    console.log(sendUrl);
+
+    axios.post(sendApi, {
+        url: sendUrl,
+        from_email: from_email,
+        to_email: to_email,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  }
+
+  preview() {
+
+    const sendApi = baseUrl + 'preview';
+    const sendUrl = this.refs.sendUrl.getValue();
+
+    axios.post(sendApi, {
+        url: sendUrl,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  }
+
   render() {
     return (
       <div style={styles.container}>
         <TextField style={styles.input}
                    underlineFocusStyle={styles.underlineStyle}
-                   floatingLabelText="请输入要推送的网址(开发中,网站还不能使用...)"
+                   ref="sendUrl"
+                   floatingLabelText="请输入要推送的网址"
         />
 
         <div style={styles.buttonGroup}>
           <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
+                        onClick={this.send.bind(this)}
                         style={styles.button}/>
 
           <RaisedButton label="预览" backgroundColor={primaryColorLight} labelColor={primaryColorText}
+                        onClick={this.preview.bind(this)}
                         style={styles.button}/>
 
           <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
@@ -28,10 +72,12 @@ class Main extends Component {
         </div>
 
         <TextField style={styles.input}
+                   ref="fromEmail"
                    underlineFocusStyle={styles.underlineStyle}
                    floatingLabelText="请输入信任的邮箱"
         />
         <TextField style={styles.input}
+                   ref="toEmail"
                    underlineFocusStyle={styles.underlineStyle}
                    floatingLabelText="请输入Kindle接收邮箱"
         />
