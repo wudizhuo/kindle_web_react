@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/lib/text-field';
 import { primaryColor,primaryColorText,primaryColorLight,accentColor,primaryColorDark } from './colors';
-import {baseUrl} from './Const';
+import {baseUrl,ERROR_CODE_FROM_EMAIL,ERROR_CODE_TO_EMAIL,ERROR_CODE_INVALID_URL} from './Const';
 import RaisedButton from 'material-ui/lib/raised-button';
 import axios from 'axios';
 import cookie from 'react-cookie';
+import isEmpty from 'lodash/lang/isEmpty';
 
 //todo response handle
 
 let from_email = "";
 let to_email = "";
+let error_from_email = "";
+let error_to_email = "";
+let send_url_error_text = "";
 
 class Main extends Component {
 
@@ -28,7 +32,18 @@ class Main extends Component {
   send() {
     const sendApi = baseUrl + 'send';
 
-    const sendUrl = this.refs.sendUrl.getValue();
+    let sendUrl = this.refs.sendUrl.getValue();
+
+    if (isEmpty(sendUrl)) {
+      send_url_error_text = "请输入要推送的网址"
+      this.forceUpdate();
+      return;
+    }
+
+    error_from_email = ""
+    error_to_email = ""
+    send_url_error_text = ""
+    this.forceUpdate();
 
     console.log(sendUrl);
 
@@ -39,6 +54,18 @@ class Main extends Component {
       })
       .then((res) => {
         console.log(res);
+      })
+      .catch((res) => {
+        if (res.data.code == ERROR_CODE_FROM_EMAIL) {
+          error_from_email = res.data.error;
+        }
+        if (res.data.code == ERROR_CODE_TO_EMAIL) {
+          error_to_email = res.data.error;
+        }
+        if (res.data.code == ERROR_CODE_INVALID_URL) {
+          send_url_error_text = res.data.error;
+        }
+        this.forceUpdate();
       });
   }
 
@@ -61,6 +88,7 @@ class Main extends Component {
         <TextField style={styles.input}
                    underlineFocusStyle={styles.underlineStyle}
                    ref="sendUrl"
+                   errorText={send_url_error_text}
                    floatingLabelText="请输入要推送的网址"
         />
 
@@ -85,10 +113,12 @@ class Main extends Component {
                    onChange={this._emailChange.bind(this)}
                    underlineFocusStyle={styles.underlineStyle}
                    floatingLabelText="请输入信任的邮箱"
+                   errorText={error_from_email}
         />
         <TextField style={styles.input}
                    ref="toEmail"
                    value={to_email}
+                   errorText={error_to_email}
                    onChange={this._emailChange.bind(this)}
                    underlineFocusStyle={styles.underlineStyle}
                    floatingLabelText="请输入Kindle接收邮箱"
@@ -146,7 +176,7 @@ var styles = {
   buttonGroup: {
     display: 'flex',
     width: '39%',
-    marginTop: '3vh',
+    marginTop: '2vh',
     marginBottom: '15vh',
   },
 
