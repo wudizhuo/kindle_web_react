@@ -6,10 +6,11 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import CircularProgress from 'material-ui/lib/circular-progress';
 import axios from 'axios';
 import cookie from 'react-cookie';
-import isEmpty from 'lodash/lang/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 import Snackbar from 'material-ui/lib/snackbar';
 
-//todo response handle
+//todo 如果是未找到发送的内容 1分钟内再次点击会提示错误 应该修改server1分钟的查询语句
+//todo 把preview等未实现的功能 ui处理下 变成不可点击
 
 let from_email = "";
 let to_email = "";
@@ -39,11 +40,11 @@ class Main extends Component {
 
     let sendUrl = this.refs.sendUrl.getValue();
 
-    if (isEmpty(sendUrl)) {
-      send_url_error_text = "请输入要推送的网址"
-      this.forceUpdate();
-      return;
-    }
+    //if (isEmpty(sendUrl)) {
+    //  send_url_error_text = "请输入要推送的网址"
+    //  this.forceUpdate();
+    //  return;
+    //}
 
     if (this.state.showProgressBar) {
       snackbar_msg = "发送中...."
