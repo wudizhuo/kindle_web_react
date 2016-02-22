@@ -93,6 +93,8 @@ class Main extends Component {
   }
 
   preview() {
+    this.showSnackbar();
+    return;
 
     const sendApi = baseUrl + 'preview';
     const sendUrl = this.refs.sendUrl.getValue();
@@ -103,6 +105,11 @@ class Main extends Component {
       .then((res) => {
         console.log(res);
       });
+  }
+
+  attach(){
+    this.showSnackbar();
+    return;
   }
 
   render() {
@@ -124,6 +131,7 @@ class Main extends Component {
                         style={styles.button}/>
 
           <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
+                        onClick={this.attach.bind(this)}
                         style={styles.button}>
             <input type="file" style={styles.exampleImageInput}/>
           </RaisedButton>
