@@ -14,13 +14,22 @@ class AppNav extends Component {
     this.setState({open: !this.state.open});
   }
 
+  _weibo() {
+    window.open("http://weibo.com/wudizhuo");
+  }
+
+  _help() {
+    window.open("http://sspai.com/28388");
+  }
+
   render() {
     return (
       <div>
         <LeftNav open={this.state.open} docked={false} onRequestChange={open => this.setState({open})}>
           <div style={styles.label}>Kindle助手</div>
-          <MenuItem style={styles.item}>微博</MenuItem>
-          <MenuItem>使用帮助</MenuItem>
+          <MenuItem style={styles.item} onTouchTap={this._weibo}>
+            微博</MenuItem>
+          <MenuItem onTouchTap={this._help}>使用帮助</MenuItem>
         </LeftNav>
       </div>
     )

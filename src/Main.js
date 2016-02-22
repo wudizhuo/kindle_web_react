@@ -40,11 +40,11 @@ class Main extends Component {
 
     let sendUrl = this.refs.sendUrl.getValue();
 
-    //if (isEmpty(sendUrl)) {
-    //  send_url_error_text = "请输入要推送的网址"
-    //  this.forceUpdate();
-    //  return;
-    //}
+    if (isEmpty(sendUrl)) {
+      send_url_error_text = "请输入要推送的网址"
+      this.forceUpdate();
+      return;
+    }
 
     if (this.state.showProgressBar) {
       snackbar_msg = "发送中...."
@@ -150,11 +150,22 @@ class Main extends Component {
         {this._saveButton()}
         <Snackbar
           open={this.state.showSnackbar}
+          onRequestClose={this._onRequestClose}
           message={snackbar_msg}
           autoHideDuration={3000}
         />
       </div>
     );
+  }
+
+  showSnackbar(){
+    snackbar_msg = "开发中的功能,暂不能用...";
+    this.state.showSnackbar = true;
+    this.forceUpdate();
+  }
+
+  _onRequestClose(){
+    this.state.showProgressBar = false;
   }
 
   _progressBar() {

@@ -9,8 +9,8 @@ class App extends Component {
     return (
       <div className="app-wrap">
         <AppNav ref="leftNav" />
-        <Header onTouchTap={this._onLeftIconButtonTouchTap.bind(this)}/>
-        <Main />
+        <Header onTouchTap={this._onLeftIconButtonTouchTap.bind(this)} onLogin={this._showSnackbar.bind(this)}/>
+        <Main ref="main"/>
       </div>
     );
   }
@@ -18,6 +18,11 @@ class App extends Component {
   _onLeftIconButtonTouchTap() {
     this.refs.leftNav.handleToggle();
   }
+
+  _showSnackbar(){
+    this.refs.main.showSnackbar();
+  }
+
 }
 
 export default App;
