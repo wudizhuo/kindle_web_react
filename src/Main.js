@@ -33,7 +33,6 @@ class Main extends Component {
       showSnackbar: false,
       showPreviewDialog: false,
       preview: {
-        title: "",
         content: "",
       },
     };
@@ -124,7 +123,6 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         this.setState({
           preview: {
-            title: "预览内容",
             content: res.data.content,
           }
         });
@@ -148,6 +146,13 @@ class Main extends Component {
     this.setState({showPreviewDialog: false});
   };
 
+
+  iframe() {
+    return {
+      __html: this.state.preview.content
+    }
+  };
+
   _showPreviewDialog() {
     const actions = [
       <FlatButton
@@ -160,13 +165,12 @@ class Main extends Component {
 
     return (
       <Dialog
-        title={this.state.preview.title}
         actions={actions}
         modal={false}
         open={this.state.showPreviewDialog}
         onRequestClose={this.handleDialogClose.bind(this)}
       >
-        {this.state.preview.content}
+        <div dangerouslySetInnerHTML={ this.iframe() }/>
       </Dialog>
     );
   }
