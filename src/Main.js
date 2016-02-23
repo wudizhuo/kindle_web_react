@@ -32,6 +32,10 @@ class Main extends Component {
       showProgressBar: false,
       showSnackbar: false,
       showPreviewDialog: false,
+      preview: {
+        title: "",
+        content: "",
+      },
     };
 
     from_email = cookie.load('from_email');
@@ -59,8 +63,7 @@ class Main extends Component {
     error_to_email = ""
     send_url_error_text = ""
 
-    this.state.showProgressBar = true;
-    this.forceUpdate();
+    this.setState({showProgressBar: true});
 
     axios.post(sendApi, {
         url: sendUrl,
@@ -68,14 +71,14 @@ class Main extends Component {
         to_email: to_email,
       })
       .then((res) => {
-        this.state.showSnackbar = true;
-        this.state.showProgressBar = false;
-
         snackbar_msg = "已发送"
+        this.setState({showSnackbar: true});
+        this.setState({showProgressBar: false});
+
         this.forceUpdate();
       })
       .catch((res) => {
-        this.state.showProgressBar = false;
+        this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_FROM_EMAIL:
             error_from_email = res.data.error;
@@ -88,7 +91,7 @@ class Main extends Component {
             break;
           default:
             snackbar_msg = res.data.error
-            this.state.showSnackbar = true;
+            this.setState({showSnackbar: true});
             break;
         }
         this.forceUpdate();
@@ -96,18 +99,49 @@ class Main extends Component {
   }
 
   preview() {
-    this.setState({showPreviewDialog: true});
-    return;
-
     const sendApi = baseUrl + 'preview';
     const sendUrl = this.refs.sendUrl.getValue();
 
-    //axios.post(sendApi, {
-    //    url: sendUrl,
-    //  })
-    //  .then((res) => {
-    //    console.log(res);
-    //  });
+    if (isEmpty(sendUrl)) {
+      send_url_error_text = "请输入要预览的网址"
+      this.forceUpdate();
+      return;
+    }
+
+    if (this.state.showProgressBar) {
+      snackbar_msg = "发送中...."
+      this.forceUpdate();
+      return;
+    }
+
+    this.setState({showProgressBar: true});
+
+    axios.post(sendApi, {
+        url: sendUrl,
+      })
+      .then((res) => {
+        this.setState({showPreviewDialog: true});
+        this.setState({showProgressBar: false});
+        this.setState({
+          preview: {
+            title: "预览内容",
+            content: res.data.content,
+          }
+        });
+      })
+      .catch((res) => {
+        this.setState({showProgressBar: false});
+        switch (res.data.code) {
+          case ERROR_CODE_INVALID_URL:
+            send_url_error_text = res.data.error;
+            break;
+          default:
+            snackbar_msg = res.data.error
+            this.setState({showSnackbar: true});
+            break;
+        }
+        this.forceUpdate();
+      });
   }
 
   handleDialogClose() {
@@ -126,13 +160,13 @@ class Main extends Component {
 
     return (
       <Dialog
-        title="Dialog With Actions"
+        title={this.state.preview.title}
         actions={actions}
         modal={false}
         open={this.state.showPreviewDialog}
         onRequestClose={this.handleDialogClose.bind(this)}
       >
-        The actions in this window were passed in as an array of React objects.
+        {this.state.preview.content}
       </Dialog>
     );
   }
@@ -188,7 +222,7 @@ class Main extends Component {
         {this._saveButton()}
         <Snackbar
           open={this.state.showSnackbar}
-          onRequestClose={this._onRequestClose}
+          onRequestClose={this._onRequestClose.bind(this)}
           message={snackbar_msg}
           autoHideDuration={3000}
         />
@@ -198,12 +232,11 @@ class Main extends Component {
 
   showSnackbar() {
     snackbar_msg = "开发中的功能,暂不能用...";
-    this.state.showSnackbar = true;
-    this.forceUpdate();
+    this.setState({showSnackbar: true});
   }
 
   _onRequestClose() {
-    this.state.showSnackbar = false;
+    this.setState({showSnackbar: false});
   }
 
   _progressBar() {
@@ -217,10 +250,9 @@ class Main extends Component {
   }
 
   _emailChange() {
-    this.state.isShowSaveBtn = true;
     from_email = this.refs.fromEmail.getValue();
     to_email = this.refs.toEmail.getValue();
-    this.forceUpdate();
+    this.setState({isShowSaveBtn: true});
   }
 
   _saveButton() {
@@ -236,10 +268,9 @@ class Main extends Component {
   }
 
   _saveEmail() {
-    this.state.isShowSaveBtn = false;
     cookie.save('from_email', this.refs.fromEmail.getValue());
     cookie.save('to_email', this.refs.toEmail.getValue());
-    this.forceUpdate();
+    this.setState({isShowSaveBtn: false});
   }
 
 }
