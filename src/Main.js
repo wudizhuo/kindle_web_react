@@ -8,6 +8,8 @@ import axios from 'axios';
 import cookie from 'react-cookie';
 import isEmpty from 'lodash/isEmpty';
 import Snackbar from 'material-ui/lib/snackbar';
+import Dialog from 'material-ui/lib/dialog';
+import FlatButton from 'material-ui/lib/flat-button';
 
 //todo 如果是未找到发送的内容 1分钟内再次点击会提示错误 应该修改server1分钟的查询语句
 //todo 把preview等未实现的功能 ui处理下 变成不可点击
@@ -29,6 +31,7 @@ class Main extends Component {
       isShowSaveBtn: false,
       showProgressBar: false,
       showSnackbar: false,
+      showPreviewDialog: false,
     };
 
     from_email = cookie.load('from_email');
@@ -93,21 +96,48 @@ class Main extends Component {
   }
 
   preview() {
-    this.showSnackbar();
+    this.setState({showPreviewDialog: true});
     return;
 
     const sendApi = baseUrl + 'preview';
     const sendUrl = this.refs.sendUrl.getValue();
 
-    axios.post(sendApi, {
-        url: sendUrl,
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    //axios.post(sendApi, {
+    //    url: sendUrl,
+    //  })
+    //  .then((res) => {
+    //    console.log(res);
+    //  });
   }
 
-  attach(){
+  handleDialogClose() {
+    this.setState({showPreviewDialog: false});
+  };
+
+  _showPreviewDialog() {
+    const actions = [
+      <FlatButton
+        label="关闭"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleDialogClose.bind(this)}
+      />,
+    ];
+
+    return (
+      <Dialog
+        title="Dialog With Actions"
+        actions={actions}
+        modal={false}
+        open={this.state.showPreviewDialog}
+        onRequestClose={this.handleDialogClose.bind(this)}
+      >
+        The actions in this window were passed in as an array of React objects.
+      </Dialog>
+    );
+  }
+
+  attach() {
     this.showSnackbar();
     return;
   }
@@ -129,7 +159,7 @@ class Main extends Component {
           <RaisedButton label="预览" backgroundColor={primaryColorLight} labelColor={primaryColorText}
                         onClick={this.preview.bind(this)}
                         style={styles.button}/>
-
+          {this._showPreviewDialog()}
           <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
                         onClick={this.attach.bind(this)}
                         style={styles.button}>
@@ -166,13 +196,13 @@ class Main extends Component {
     );
   }
 
-  showSnackbar(){
+  showSnackbar() {
     snackbar_msg = "开发中的功能,暂不能用...";
     this.state.showSnackbar = true;
     this.forceUpdate();
   }
 
-  _onRequestClose(){
+  _onRequestClose() {
     this.state.showSnackbar = false;
   }
 
