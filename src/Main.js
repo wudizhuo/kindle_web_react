@@ -173,7 +173,7 @@ class Main extends Component {
   }
 
   _onRequestClose(){
-    this.state.showProgressBar = false;
+    this.state.showSnackbar = false;
   }
 
   _progressBar() {
