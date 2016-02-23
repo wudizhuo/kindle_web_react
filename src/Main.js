@@ -23,7 +23,6 @@ let snackbar_msg = "";
 
 class Main extends Component {
 
-
   constructor(props) {
     super(props);
 
@@ -156,11 +155,16 @@ class Main extends Component {
       />,
     ];
 
+    const customContentStyle = {
+      overflow: 'auto',
+    };
+
     return (
       <Dialog
         actions={actions}
         modal={false}
         open={this.state.showPreviewDialog}
+        bodyStyle={customContentStyle}
         onRequestClose={this.handleDialogClose.bind(this)}
       >
         <div
@@ -325,8 +329,8 @@ var styles = {
 
   iframe: {
     display: 'flex',
-    flexGrow: 1,
     flexDirection: 'column',
+    overflowY: 'scroll',
   },
 
   exampleImageInput: {
