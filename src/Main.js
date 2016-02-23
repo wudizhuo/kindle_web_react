@@ -146,13 +146,6 @@ class Main extends Component {
     this.setState({showPreviewDialog: false});
   };
 
-
-  iframe() {
-    return {
-      __html: this.state.preview.content
-    }
-  };
-
   _showPreviewDialog() {
     const actions = [
       <FlatButton
@@ -170,7 +163,9 @@ class Main extends Component {
         open={this.state.showPreviewDialog}
         onRequestClose={this.handleDialogClose.bind(this)}
       >
-        <div dangerouslySetInnerHTML={ this.iframe() }/>
+        <div
+          style={styles.iframe}
+          dangerouslySetInnerHTML={ {__html: this.state.preview.content} }/>
       </Dialog>
     );
   }
@@ -326,6 +321,12 @@ var styles = {
   labelStyle: {
     fontSize: '18px',
     fontWeight: 'bold'
+  },
+
+  iframe: {
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'column',
   },
 
   exampleImageInput: {
