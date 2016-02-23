@@ -7,7 +7,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="app-wrap">
+      <div className="home">
         <AppNav ref="leftNav" />
         <Header onTouchTap={this._onLeftIconButtonTouchTap.bind(this)} onLogin={this._showSnackbar.bind(this)}/>
         <Main ref="main"/>
