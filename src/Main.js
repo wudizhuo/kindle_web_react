@@ -307,10 +307,9 @@ var styles = {
   },
 
   button: {
+    flexGrow: 1,
     textAlign: 'center',
-    marginRight: '2%',
-    width: '35%',
-    height: '5vh',
+    margin: '1%',
   },
 
   progress: {
