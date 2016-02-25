@@ -1,2 +1,12 @@
 @import "palette";
 @import "home";
+
+.main_button_group{
+  flex-direction: column;
+}
+
+@media (min-width: 600px) {
+  .main_button_group{
+    flex-direction: row;
+  }
+}
