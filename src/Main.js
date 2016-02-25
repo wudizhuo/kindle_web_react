@@ -188,7 +188,7 @@ class Main extends Component {
                    errorText={send_url_error_text}
                    floatingLabelText="请输入要推送的网址"
         />
-        <div style={styles.buttonGroup}>
+        <div style={styles.buttonGroup} className="main_button_group" >
           <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
                         onClick={this.send.bind(this)}
                         style={styles.button}/>
@@ -206,7 +206,7 @@ class Main extends Component {
 
         {this._progressBar()}
 
-        <TextField style={styles.fromEmail}
+        <TextField style={Object.assign({},styles.input,styles.fromEmail)}
                    ref="fromEmail"
                    value={from_email}
                    onChange={this._emailChange.bind(this)}
@@ -288,11 +288,10 @@ var styles = {
   },
 
   input: {
-    width: '39%',
+    minWidth: '39%',
   },
 
   fromEmail: {
-    width: '39%',
     marginTop: '15vh',
   },
 
@@ -302,14 +301,14 @@ var styles = {
 
   buttonGroup: {
     display: 'flex',
-    width: '39%',
+    minWidth: '39%',
     marginTop: '2vh',
   },
 
   button: {
     flexGrow: 1,
     textAlign: 'center',
-    margin: '1%',
+    margin: '1.5%',
   },
 
   progress: {
