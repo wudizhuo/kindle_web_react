@@ -6,8 +6,21 @@ import IconButton from 'material-ui/lib/icon-button';
 
 class Header extends Component {
 
-  _app() {
-    window.open("http://sj.qq.com/myapp/detail.htm?apkName=com.kindleassistant");
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      bigScreen: false,
+    };
+
+  }
+
+  componentWillMount() {
+    let setBigScreen = function () {
+      this.setState({bigScreen: document.body.clientWidth > 600});
+    }.bind(this);
+    setBigScreen();
+    window.onresize = setBigScreen;
   }
 
   render() {
@@ -21,17 +34,28 @@ class Header extends Component {
           onLeftIconButtonTouchTap={this.props.onTouchTap}
           onTitleTouchTap={this.props.onTouchTap}>
           <FlatButton style={styles.text} label="手机APP"
-                      onClick={this._app.bind(this)}
+                      linkButton={true}
+                      href='http://sj.qq.com/myapp/detail.htm?apkName=com.kindleassistant'
           />
 
-          <FlatButton label="登陆"
-                      style={styles.text}
-                      onClick={this.props.onLogin}
-          />
+          {this._login()}
+
         </AppBar>
       </div>
     );
   }
+
+  _login() {
+    if (this.state.bigScreen) {
+      return (
+        <FlatButton label="登陆"
+                    style={styles.text}
+                    onClick={this.props.onLogin}
+        />
+      );
+    }
+  }
+
 
 }
 
@@ -51,6 +75,8 @@ var styles = {
     boxShadow: '0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)',
   },
   text: {
+    display: 'flex',
+    alignItems: 'center',
     color: '#ffffff',
     fontSize: '16px',
   },

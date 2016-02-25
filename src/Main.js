@@ -40,6 +40,62 @@ class Main extends Component {
     to_email = cookie.load('to_email');
   }
 
+  render() {
+    return (
+      <div style={styles.container}>
+        <TextField style={styles.input}
+                   underlineFocusStyle={styles.underlineStyle}
+                   ref="sendUrl"
+                   errorText={send_url_error_text}
+                   floatingLabelText="请输入要推送的网址"
+        />
+        <div style={styles.buttonGroup} className="main_button_group">
+          <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
+                        onClick={this.send.bind(this)}
+                        style={styles.button}/>
+
+          <div style={styles.main_child_button_group}>
+            {this._showPreviewDialog()}
+            <RaisedButton label="预览" backgroundColor={primaryColorLight} labelColor={primaryColorText}
+                          onClick={this.preview.bind(this)}
+                          style={styles.button}/>
+            <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
+                          onClick={this.attach.bind(this)}
+                          style={styles.button}>
+              <input type="file" style={styles.exampleImageInput}/>
+            </RaisedButton>
+          </div>
+        </div>
+
+        {this._progressBar()}
+
+        <TextField style={Object.assign({},styles.input,styles.fromEmail)}
+                   ref="fromEmail"
+                   value={from_email}
+                   onChange={this._emailChange.bind(this)}
+                   underlineFocusStyle={styles.underlineStyle}
+                   floatingLabelText="请输入信任的邮箱"
+                   errorText={error_from_email}
+        />
+        <TextField style={styles.input}
+                   ref="toEmail"
+                   value={to_email}
+                   errorText={error_to_email}
+                   onChange={this._emailChange.bind(this)}
+                   underlineFocusStyle={styles.underlineStyle}
+                   floatingLabelText="请输入Kindle接收邮箱"
+        />
+        {this._saveButton()}
+        <Snackbar
+          open={this.state.showSnackbar}
+          onRequestClose={this._onRequestClose.bind(this)}
+          message={snackbar_msg}
+          autoHideDuration={3000}
+        />
+      </div>
+    );
+  }
+
   send() {
     const sendApi = baseUrl + 'send';
 
@@ -179,59 +235,6 @@ class Main extends Component {
     return;
   }
 
-  render() {
-    return (
-      <div style={styles.container}>
-        <TextField style={styles.input}
-                   underlineFocusStyle={styles.underlineStyle}
-                   ref="sendUrl"
-                   errorText={send_url_error_text}
-                   floatingLabelText="请输入要推送的网址"
-        />
-        <div style={styles.buttonGroup} className="main_button_group" >
-          <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
-                        onClick={this.send.bind(this)}
-                        style={styles.button}/>
-
-          <RaisedButton label="预览" backgroundColor={primaryColorLight} labelColor={primaryColorText}
-                        onClick={this.preview.bind(this)}
-                        style={styles.button}/>
-          {this._showPreviewDialog()}
-          <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
-                        onClick={this.attach.bind(this)}
-                        style={styles.button}>
-            <input type="file" style={styles.exampleImageInput}/>
-          </RaisedButton>
-        </div>
-
-        {this._progressBar()}
-
-        <TextField style={Object.assign({},styles.input,styles.fromEmail)}
-                   ref="fromEmail"
-                   value={from_email}
-                   onChange={this._emailChange.bind(this)}
-                   underlineFocusStyle={styles.underlineStyle}
-                   floatingLabelText="请输入信任的邮箱"
-                   errorText={error_from_email}
-        />
-        <TextField style={styles.input}
-                   ref="toEmail"
-                   value={to_email}
-                   errorText={error_to_email}
-                   onChange={this._emailChange.bind(this)}
-                   underlineFocusStyle={styles.underlineStyle}
-                   floatingLabelText="请输入Kindle接收邮箱"
-        />
-        {this._saveButton()}
-        <Snackbar
-          open={this.state.showSnackbar}
-          onRequestClose={this._onRequestClose.bind(this)}
-          message={snackbar_msg}
-          autoHideDuration={3000}
-        />
-      </div>
-    );
-  }
 
   showSnackbar() {
     snackbar_msg = "开发中的功能,暂不能用...";
@@ -308,7 +311,13 @@ var styles = {
   button: {
     flexGrow: 1,
     textAlign: 'center',
-    margin: '1.5%',
+    margin: '1vh',
+  },
+
+  main_child_button_group: {
+    display: 'flex',
+    flexGrow: 2,
+    textAlign: 'center',
   },
 
   progress: {
