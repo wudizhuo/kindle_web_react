@@ -69,7 +69,7 @@ class Main extends Component {
 
         {this._progressBar()}
 
-        <TextField style={Object.assign({},styles.input,styles.fromEmail)}
+        <TextField style={styles.fromEmail}
                    ref="fromEmail"
                    value={from_email}
                    onChange={this._emailChange.bind(this)}
@@ -295,6 +295,7 @@ var styles = {
   },
 
   fromEmail: {
+    minWidth: '39%',
     marginTop: '15vh',
   },
 
