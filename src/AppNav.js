@@ -22,6 +22,10 @@ class AppNav extends Component {
     window.open("http://sspai.com/28388");
   }
 
+  _contribute() {
+    window.open("http://weibo.com/ttarticle/p/show?id=2309403946927568873479");
+  }
+
   render() {
     return (
       <div>
@@ -30,6 +34,7 @@ class AppNav extends Component {
           <MenuItem style={styles.item} onTouchTap={this._weibo}>
             微博</MenuItem>
           <MenuItem onTouchTap={this._help}>使用帮助</MenuItem>
+          <MenuItem onTouchTap={this._contribute}>打赏支持</MenuItem>
         </LeftNav>
       </div>
     )
