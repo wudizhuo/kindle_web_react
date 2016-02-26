@@ -3,6 +3,7 @@ export const primaryColorLight = '#68CFFD';
 export const primaryColorText = '#FFFFFF';
 export const accentColor = '#FF4081';
 export const primaryColorDark = '#0288D1';
+export const secondaryTextColor = '#727272';
 
 export const SUPER_NICE = 'darkred';
 
