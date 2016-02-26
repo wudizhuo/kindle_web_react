@@ -66,6 +66,7 @@ var styles = {
     fontSize: '12px',
     color: secondaryTextColor,
     textAlign: 'center',
+    marginBottom:'3px',
   }
 };
 
