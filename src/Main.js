@@ -11,9 +11,6 @@ import Snackbar from 'material-ui/lib/snackbar';
 import Dialog from 'material-ui/lib/dialog';
 import FlatButton from 'material-ui/lib/flat-button';
 
-//todo 如果是未找到发送的内容 1分钟内再次点击会提示错误 应该修改server1分钟的查询语句
-//todo 把preview等未实现的功能 ui处理下 变成不可点击
-
 let from_email = "";
 let to_email = "";
 let error_from_email = "";
