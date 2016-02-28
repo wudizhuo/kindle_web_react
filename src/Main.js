@@ -31,6 +31,7 @@ class Main extends Component {
       preview: {
         content: "",
       },
+      filePath: "",
     };
 
     from_email = cookie.load('from_email');
@@ -45,11 +46,11 @@ class Main extends Component {
                    ref="sendUrl"
                    errorText={send_url_error_text}
                    floatingLabelText="请输入要推送的网址"
+                   onChange={this.sendTextOnChange.bind(this)}
+                   multiLine="true"
         />
         <div style={styles.buttonGroup} className="main_button_group">
-          <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
-                        onClick={this.send.bind(this)}
-                        style={styles.button}/>
+          {this._sendBtn()}
 
           <div style={styles.main_child_button_group}>
             {this._showPreviewDialog()}
@@ -57,9 +58,8 @@ class Main extends Component {
                           onClick={this.preview.bind(this)}
                           style={styles.button}/>
             <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
-                          onClick={this.attach.bind(this)}
                           style={styles.button}>
-              <input type="file" style={styles.exampleImageInput}/>
+              <input type="file" style={styles.fileInput} onChange={this.chooseFile.bind(this)}/>
             </RaisedButton>
           </div>
         </div>
@@ -91,6 +91,38 @@ class Main extends Component {
         />
       </div>
     );
+  }
+
+  sendTextOnChange(event){
+    if (isEmpty(this.refs.sendUrl.getValue())) {
+      this.setState({filePath: ""});
+      return;
+    }
+  }
+
+  chooseFile(event) {
+    var filePath = event.target.value;
+    if (isEmpty(filePath)) {
+      return;
+    }
+    this.setState({filePath: filePath});
+    this.refs.sendUrl.setValue(filePath);
+  }
+
+  _sendBtn() {
+    if (isEmpty(this.state.filePath)) {
+      return (
+        <RaisedButton label="发送" backgroundColor={primaryColor} labelColor={primaryColorText}
+                      onClick={this.send.bind(this)}
+                      style={styles.button}/>
+      );
+    } else {
+      return (
+        <RaisedButton label="发送附件" backgroundColor={primaryColor} labelColor={primaryColorText}
+                      onClick={this.attach.bind(this)}
+                      style={styles.button}/>
+      );
+    }
   }
 
   send() {
@@ -194,6 +226,64 @@ class Main extends Component {
       });
   }
 
+
+  attach() {
+    let api = baseUrl + 'uploads';
+
+    let sendUrl = this.refs.sendUrl.getValue();
+
+    if (isEmpty(sendUrl)) {
+      send_url_error_text = "请选择要发送的附件"
+      this.forceUpdate();
+      return;
+    }
+
+    if (this.state.showProgressBar) {
+      snackbar_msg = "发送中...."
+      this.forceUpdate();
+      return;
+    }
+
+    error_from_email = ""
+    error_to_email = ""
+    send_url_error_text = ""
+
+    this.setState({showProgressBar: true});
+
+    let fileData = new FormData();
+    fileData.append("to_email", to_email);
+    fileData.append("from_email", from_email);
+
+    data.append('file', document.getElementById('file').files[0]);
+    axios.post(api, data)
+      .then((res) => {
+        snackbar_msg = "已发送"
+        this.setState({showSnackbar: true});
+        this.setState({showProgressBar: false});
+
+        this.forceUpdate();
+      })
+      .catch((res) => {
+        this.setState({showProgressBar: false});
+        switch (res.data.code) {
+          case ERROR_CODE_FROM_EMAIL:
+            error_from_email = res.data.error;
+            break;
+          case ERROR_CODE_TO_EMAIL:
+            error_to_email = res.data.error;
+            break;
+          case ERROR_CODE_INVALID_URL:
+            send_url_error_text = res.data.error;
+            break;
+          default:
+            snackbar_msg = res.data.error
+            this.setState({showSnackbar: true});
+            break;
+        }
+        this.forceUpdate();
+      });
+  }
+
   handleDialogClose() {
     this.setState({showPreviewDialog: false});
   };
@@ -226,12 +316,6 @@ class Main extends Component {
       </Dialog>
     );
   }
-
-  attach() {
-    this.showSnackbar();
-    return;
-  }
-
 
   showSnackbar() {
     snackbar_msg = "开发中的功能,暂不能用...";
@@ -338,7 +422,7 @@ var styles = {
     overflowY: 'scroll',
   },
 
-  exampleImageInput: {
+  fileInput: {
     cursor: 'pointer',
     position: 'absolute',
     top: 0,
