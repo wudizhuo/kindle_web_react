@@ -10,11 +10,9 @@ import isEmpty from 'lodash/isEmpty';
 import Snackbar from 'material-ui/lib/snackbar';
 import Dialog from 'material-ui/lib/dialog';
 import FlatButton from 'material-ui/lib/flat-button';
+import Email from './Email';
 
-let from_email = "";
-let to_email = "";
-let error_from_email = "";
-let error_to_email = "";
+
 let send_url_error_text = "";
 let snackbar_msg = "";
 
@@ -24,7 +22,6 @@ class Main extends Component {
     super(props);
 
     this.state = {
-      isShowSaveBtn: false,
       showProgressBar: false,
       showSnackbar: false,
       showPreviewDialog: false,
@@ -32,10 +29,10 @@ class Main extends Component {
         content: "",
       },
       filePath: "",
+      error_from_email:"",
+      error_to_email:"",
     };
 
-    from_email = cookie.load('from_email');
-    to_email = cookie.load('to_email');
   }
 
   render() {
@@ -47,7 +44,7 @@ class Main extends Component {
                    errorText={send_url_error_text}
                    floatingLabelText="请输入要推送的网址"
                    onChange={this.sendTextOnChange.bind(this)}
-                   multiLine="true"
+                   multiLine={true}
         />
         <div style={styles.buttonGroup} className="main_button_group">
           {this._sendBtn()}
@@ -66,23 +63,12 @@ class Main extends Component {
 
         {this._progressBar()}
 
-        <TextField style={styles.fromEmail}
-                   ref="fromEmail"
-                   value={from_email}
-                   onChange={this._emailChange.bind(this)}
-                   underlineFocusStyle={styles.underlineStyle}
-                   floatingLabelText="请输入信任的邮箱"
-                   errorText={error_from_email}
+        <Email
+          ref="email"
+          error_from_email={this.state.error_from_email}
+          error_to_email={this.state.error_to_email}
         />
-        <TextField style={styles.input}
-                   ref="toEmail"
-                   value={to_email}
-                   errorText={error_to_email}
-                   onChange={this._emailChange.bind(this)}
-                   underlineFocusStyle={styles.underlineStyle}
-                   floatingLabelText="请输入Kindle接收邮箱"
-        />
-        {this._saveButton()}
+
         <Snackbar
           open={this.state.showSnackbar}
           onRequestClose={this._onRequestClose.bind(this)}
@@ -93,7 +79,7 @@ class Main extends Component {
     );
   }
 
-  sendTextOnChange(event){
+  sendTextOnChange(event) {
     if (isEmpty(this.refs.sendUrl.getValue())) {
       this.setState({filePath: ""});
       return;
@@ -136,17 +122,16 @@ class Main extends Component {
       return;
     }
 
+    let from_email = this.refs.email.getFromMail();
+    let to_email = this.refs.email.getToMail();
+
     if (this.state.showProgressBar) {
       snackbar_msg = "发送中...."
       this.forceUpdate();
       return;
     }
 
-    error_from_email = ""
-    error_to_email = ""
-    send_url_error_text = ""
-
-    this.setState({showProgressBar: true});
+    this._resetWarning();
 
     axios.post(sendApi, {
         url: sendUrl,
@@ -164,10 +149,10 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_FROM_EMAIL:
-            error_from_email = res.data.error;
+            this.setState({error_from_email:res.data.error});
             break;
           case ERROR_CODE_TO_EMAIL:
-            error_to_email = res.data.error;
+            this.setState({error_to_email:res.data.error});
             break;
           case ERROR_CODE_INVALID_URL:
             send_url_error_text = res.data.error;
@@ -179,6 +164,13 @@ class Main extends Component {
         }
         this.forceUpdate();
       });
+  }
+
+  _resetWarning() {
+    this.setState({showProgressBar: true});
+    this.setState({error_from_email: ""});
+    this.setState({error_to_email: ""});
+    send_url_error_text = ""
   }
 
   preview() {
@@ -197,7 +189,7 @@ class Main extends Component {
       return;
     }
 
-    this.setState({showProgressBar: true});
+    this._resetWarning();
 
     axios.post(sendApi, {
         url: sendUrl,
@@ -244,9 +236,7 @@ class Main extends Component {
       return;
     }
 
-    error_from_email = ""
-    error_to_email = ""
-    send_url_error_text = ""
+    this._resetWarning();
 
     this.setState({showProgressBar: true});
 
@@ -336,30 +326,6 @@ class Main extends Component {
     }
   }
 
-  _emailChange() {
-    from_email = this.refs.fromEmail.getValue();
-    to_email = this.refs.toEmail.getValue();
-    this.setState({isShowSaveBtn: true});
-  }
-
-  _saveButton() {
-    if (this.state.isShowSaveBtn) {
-      return (
-        <RaisedButton
-          label="保存" backgroundColor={accentColor} labelColor={primaryColorText}
-          onClick={this._saveEmail.bind(this)}
-          style={styles.saveButton}
-        />
-      );
-    }
-  }
-
-  _saveEmail() {
-    cookie.save('from_email', this.refs.fromEmail.getValue());
-    cookie.save('to_email', this.refs.toEmail.getValue());
-    this.setState({isShowSaveBtn: false});
-  }
-
 }
 
 var styles = {
@@ -373,11 +339,6 @@ var styles = {
 
   input: {
     minWidth: '39%',
-  },
-
-  fromEmail: {
-    minWidth: '39%',
-    marginTop: '15vh',
   },
 
   underlineStyle: {
@@ -404,11 +365,6 @@ var styles = {
 
   progress: {
     marginTop: '5vh',
-  },
-
-  saveButton: {
-    marginTop: '3vh',
-    width: '15%',
   },
 
   labelStyle: {
