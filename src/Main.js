@@ -56,7 +56,7 @@ class Main extends Component {
                           style={styles.button}/>
             <RaisedButton label="附件" backgroundColor={primaryColorLight} labelColor={primaryColorText}
                           style={styles.button}>
-              <input type="file" style={styles.fileInput} onChange={this.chooseFile.bind(this)}/>
+              <input ref="file" type="file" style={styles.fileInput} onChange={this.chooseFile.bind(this)}/>
             </RaisedButton>
           </div>
         </div>
@@ -87,7 +87,7 @@ class Main extends Component {
   }
 
   chooseFile(event) {
-    var filePath = event.target.value;
+    var filePath = event.target.files[0].name;
     if (isEmpty(filePath)) {
       return;
     }
@@ -220,7 +220,7 @@ class Main extends Component {
 
 
   attach() {
-    let api = baseUrl + 'uploads';
+    let api = baseUrl + 'upload';
 
     let sendUrl = this.refs.sendUrl.getValue();
 
@@ -230,22 +230,23 @@ class Main extends Component {
       return;
     }
 
+    this._resetWarning();
+
     if (this.state.showProgressBar) {
       snackbar_msg = "发送中...."
       this.forceUpdate();
       return;
     }
 
-    this._resetWarning();
-
-    this.setState({showProgressBar: true});
-
     let fileData = new FormData();
+    let from_email = this.refs.email.getFromMail();
+    let to_email = this.refs.email.getToMail();
+
     fileData.append("to_email", to_email);
     fileData.append("from_email", from_email);
 
-    data.append('file', document.getElementById('file').files[0]);
-    axios.post(api, data)
+    fileData.append('file', this.refs.file.files[0]);
+    axios.post(api, fileData)
       .then((res) => {
         snackbar_msg = "已发送"
         this.setState({showSnackbar: true});
@@ -257,10 +258,10 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_FROM_EMAIL:
-            error_from_email = res.data.error;
+            this.setState({error_from_email:res.data.error});
             break;
           case ERROR_CODE_TO_EMAIL:
-            error_to_email = res.data.error;
+            this.setState({error_to_email:res.data.error});
             break;
           case ERROR_CODE_INVALID_URL:
             send_url_error_text = res.data.error;
