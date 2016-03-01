@@ -13,7 +13,6 @@ import FlatButton from 'material-ui/lib/flat-button';
 import Email from './Email';
 
 //TODO 修复上传文件类型 不允许的bug
-//TODO js 压缩 css 压缩
 
 let send_url_error_text = "";
 let snackbar_msg = "";
