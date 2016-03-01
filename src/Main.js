@@ -12,6 +12,8 @@ import Dialog from 'material-ui/lib/dialog';
 import FlatButton from 'material-ui/lib/flat-button';
 import Email from './Email';
 
+//TODO 修复上传文件类型 不允许的bug
+//TODO js 压缩 css 压缩
 
 let send_url_error_text = "";
 let snackbar_msg = "";
@@ -29,8 +31,8 @@ class Main extends Component {
         content: "",
       },
       filePath: "",
-      error_from_email:"",
-      error_to_email:"",
+      error_from_email: "",
+      error_to_email: "",
     };
 
   }
@@ -149,10 +151,10 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_FROM_EMAIL:
-            this.setState({error_from_email:res.data.error});
+            this.setState({error_from_email: res.data.error});
             break;
           case ERROR_CODE_TO_EMAIL:
-            this.setState({error_to_email:res.data.error});
+            this.setState({error_to_email: res.data.error});
             break;
           case ERROR_CODE_INVALID_URL:
             send_url_error_text = res.data.error;
@@ -258,10 +260,10 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_FROM_EMAIL:
-            this.setState({error_from_email:res.data.error});
+            this.setState({error_from_email: res.data.error});
             break;
           case ERROR_CODE_TO_EMAIL:
-            this.setState({error_to_email:res.data.error});
+            this.setState({error_to_email: res.data.error});
             break;
           case ERROR_CODE_INVALID_URL:
             send_url_error_text = res.data.error;

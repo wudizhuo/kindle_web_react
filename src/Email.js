@@ -31,7 +31,7 @@ class Email extends Component {
                    floatingLabelText="请输入信任的邮箱"
                    errorText={this.props.error_from_email}
         />
-        <TextField style={styles.input}
+        <TextField style={styles.toEmail}
                    ref="toEmail"
                    value={to_email}
                    errorText={this.props.error_to_email}
@@ -81,6 +81,7 @@ class Email extends Component {
 var styles = {
   container: {
     display: 'flex',
+    minWidth: '39%',
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
@@ -92,9 +93,14 @@ var styles = {
   },
 
   fromEmail: {
-    minWidth: '39%',
+    width: '100%',
     marginTop: '15vh',
   },
+
+  toEmail: {
+    width: '100%',
+  },
+
 };
 
 export default Email;
