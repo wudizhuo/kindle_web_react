@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        loader: 'babel!svg-react'
+        loader: 'babel?presets[]=es2015,presets[]=react!svg-react'
       },
       {
         test: /\.(png|jpg)$/,

@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/lib/flat-button';
 import AppBar from 'material-ui/lib/app-bar';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-import Apple_Store from 'babel!svg-react!./assets/Apple_Store.svg';
+import Apple_Store from '-!babel!svg-react!./assets/Apple_Store.svg';
 
 class Header extends Component {
 
