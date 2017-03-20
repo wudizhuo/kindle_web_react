@@ -35,6 +35,10 @@ module.exports = {
         loader: 'style!css!postcss!sass'
       },
       {
+        test: /\.svg$/,
+        loader: 'babel!svg-react'
+      },
+      {
         test: /\.(png|jpg)$/,
         loader: 'url?limit=25000'
       }]
