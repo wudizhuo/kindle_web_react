@@ -2,6 +2,7 @@
 
 ## Installation
 
+Node Version use V6
 ```bash
 git clone
 cd kindle_web_react
