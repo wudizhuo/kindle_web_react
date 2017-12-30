@@ -118,7 +118,7 @@ class Main extends Component {
     let sendUrl = this.refs.sendUrl.getValue();
 
     if (isEmpty(sendUrl)) {
-      send_url_error_text = "请输入要推送的网址"
+      send_url_error_text = "请输入要推送的网址";
       this.forceUpdate();
       return;
     }
@@ -127,7 +127,7 @@ class Main extends Component {
     let to_email = this.refs.email.getToMail();
 
     if (this.state.showProgressBar) {
-      snackbar_msg = "发送中...."
+      snackbar_msg = "发送中....";
       this.forceUpdate();
       return;
     }
@@ -140,7 +140,7 @@ class Main extends Component {
         to_email: to_email,
       })
       .then((res) => {
-        snackbar_msg = "已发送"
+        snackbar_msg = "已发送";
         this.setState({showSnackbar: true});
         this.setState({showProgressBar: false});
 
@@ -159,7 +159,7 @@ class Main extends Component {
             send_url_error_text = res.data.error;
             break;
           default:
-            snackbar_msg = res.data.error
+            snackbar_msg = res.data.message;
             this.setState({showSnackbar: true});
             break;
         }
@@ -179,13 +179,13 @@ class Main extends Component {
     const sendUrl = this.refs.sendUrl.getValue();
 
     if (isEmpty(sendUrl)) {
-      send_url_error_text = "请输入要预览的网址"
+      send_url_error_text = "请输入要预览的网址";
       this.forceUpdate();
       return;
     }
 
     if (this.state.showProgressBar) {
-      snackbar_msg = "发送中...."
+      snackbar_msg = "发送中....";
       this.forceUpdate();
       return;
     }
@@ -208,10 +208,10 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_INVALID_URL:
-            send_url_error_text = res.data.error;
+            send_url_error_text = res.data.message;
             break;
           default:
-            snackbar_msg = res.data.error
+            snackbar_msg = res.data.message;
             this.setState({showSnackbar: true});
             break;
         }
@@ -226,7 +226,7 @@ class Main extends Component {
     let sendUrl = this.refs.sendUrl.getValue();
 
     if (isEmpty(sendUrl)) {
-      send_url_error_text = "请选择要发送的附件"
+      send_url_error_text = "请选择要发送的附件";
       this.forceUpdate();
       return;
     }
@@ -234,7 +234,7 @@ class Main extends Component {
     this._resetWarning();
 
     if (this.state.showProgressBar) {
-      snackbar_msg = "发送中...."
+      snackbar_msg = "发送中....";
       this.forceUpdate();
       return;
     }
@@ -249,7 +249,7 @@ class Main extends Component {
     fileData.append('file', this.refs.file.files[0]);
     axios.post(api, fileData)
       .then((res) => {
-        snackbar_msg = "已发送"
+        snackbar_msg = "已发送";
         this.setState({showSnackbar: true});
         this.setState({showProgressBar: false});
 
@@ -259,16 +259,16 @@ class Main extends Component {
         this.setState({showProgressBar: false});
         switch (res.data.code) {
           case ERROR_CODE_FROM_EMAIL:
-            this.setState({error_from_email: res.data.error});
+            this.setState({error_from_email: res.data.message});
             break;
           case ERROR_CODE_TO_EMAIL:
-            this.setState({error_to_email: res.data.error});
+            this.setState({error_to_email: res.data.message});
             break;
           case ERROR_CODE_INVALID_URL:
-            send_url_error_text = res.data.error;
+            send_url_error_text = res.data.message;
             break;
           default:
-            snackbar_msg = res.data.error
+            snackbar_msg = res.data.message;
             this.setState({showSnackbar: true});
             break;
         }
